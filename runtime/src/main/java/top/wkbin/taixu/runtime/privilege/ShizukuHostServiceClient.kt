@@ -103,8 +103,8 @@ class ShizukuHostServiceClient(
     }
 
     companion object {
-        private const val CONNECTION_TIMEOUT_MS = 20_000L
+        private const val CONNECTION_TIMEOUT_MS = 12_000L
         private const val BIND_MAX_RETRIES = 2
-        private const val BIND_RETRY_DELAY_MS = 1_000L
+        private const val BIND_RETRY_DELAY_MS = 500L
     }
 }

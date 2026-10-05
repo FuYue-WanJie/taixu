@@ -49,6 +49,12 @@ class PrivilegeManager(
     val state: StateFlow<PrivilegeState> = _state.asStateFlow()
     private val rootRunner = HostProcessRunner { command -> ProcessBuilder("su", "-c", command).start() }
 
+    /** 探测结果 TTL 缓存：避免 getPrivilegeInfo 每次 host 动作 / health 轮询都 fork su 或做 2 次 Binder 往返。 */
+    @Volatile private var lastProbeAtMs: Long = 0L
+    @Volatile private var cachedShizukuAvailable: Boolean = false
+    @Volatile private var cachedRootAvailable: Boolean = false
+    private val probeTtlMs: Long = 30_000L  // 30s 内复用上次探测结果
+
     /**
      * 应用进程启动时恢复并校验上次选择的模式。
      *
@@ -529,13 +535,24 @@ class PrivilegeManager(
         }
         val mode = currentMode()
 
-        val shizukuAvailable = runCatching {
-            Shizuku.pingBinder() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
-        }.getOrDefault(false)
+        // TTL 缓存命中：30s 内直接返回上次探测结果，避免重复 fork su / Binder 往返
+        val now = System.currentTimeMillis()
+        val useCache = (now - lastProbeAtMs) < probeTtlMs
+        val shizukuAvailable = if (useCache) {
+            cachedShizukuAvailable
+        } else {
+            val result = runCatching {
+                Shizuku.pingBinder() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
+            }.getOrDefault(false)
+            cachedShizukuAvailable = result
+            result
+        }
 
-        // PRoot 无需任何授权，跳过耗时的 su 探测
-        val rootAvailable = if (mode == ExecutionMode.ROOT) {
-            runCatching {
+        // PRoot 无需任何授权，跳过耗时的 su 探测（ROOT 模式走 TTL 缓存）
+        val rootAvailable = if (useCache) {
+            cachedRootAvailable
+        } else if (mode == ExecutionMode.ROOT) {
+            val result = runCatching {
                 val process = ProcessBuilder("su", "-c", "echo ok").start()
                 val completed = process.waitFor(3, TimeUnit.SECONDS)
                 if (!completed) {
@@ -545,9 +562,12 @@ class PrivilegeManager(
                     process.exitValue() == 0
                 }
             }.getOrDefault(false)
+            cachedRootAvailable = result
+            result
         } else {
             false
         }
+        if (!useCache) lastProbeAtMs = now
 
         val modeActive = when (mode) {
             ExecutionMode.PROOT -> true
@@ -556,6 +576,8 @@ class PrivilegeManager(
         }
 
         val effectiveMode = if (mode != ExecutionMode.PROOT && !modeActive) {
+            // 权限失效，清除 TTL 缓存保证下次重新探测
+            lastProbeAtMs = 0L
             val preferred = preferredMode()
             settingsDataStore.setEffectiveExecutionMode(ExecutionMode.PROOT)
             refreshState(
@@ -579,15 +601,32 @@ class PrivilegeManager(
 
     /**
      * 通过 Shizuku 以 ADB 级别 (shell uid, UID 2000) 执行命令。
+     *
+     * 稳态优化：当 state 已为 ACTIVE + SHIZUKU 时跳过重复 Binder ping，
+     * 因为 ShizukuHostServiceClient.requireService() 内部已包含
+     * pingBinder + checkSelfPermission 的兜底检查，避免单次命令
+     * 路径上 4 次 Binder 往返（2 guard + 2 requireService）。
      */
     private suspend fun executeViaShizuku(command: String, operationId: String): ShellExecResult {
+        val snapshot = state.value
+        // 稳态快速路径：state 已确认 ACTIVE + SHIZUKU，直接走 client（内部有兜底 check）
+        if (snapshot.availability == PrivilegeAvailability.ACTIVE &&
+            snapshot.effectiveMode == ExecutionMode.SHIZUKU
+        ) {
+            return try {
+                shizukuHostServiceClient.execute(operationId, command)
+            } catch (e: Exception) {
+                logger.e("Shizuku UserService execution failed", e)
+                ShellExecResult(false, -1, "", "Shizuku UserService 执行失败: ${e.message}")
+            }
+        }
+        // 慢路径：state 尚未确认或模式不匹配，执行完整探测
         if (!runCatching { Shizuku.pingBinder() }.getOrDefault(false)) {
             return ShellExecResult(false, -1, "", "Shizuku 服务未运行。请打开 Shizuku App 并确保服务已启动。")
         }
         if (Shizuku.checkSelfPermission() != PackageManager.PERMISSION_GRANTED) {
             return ShellExecResult(false, -1, "", "Shizuku 未授权。请在 Shizuku App 中授予太墟访问权限。")
         }
-
         return try {
             shizukuHostServiceClient.execute(operationId, command)
         } catch (e: Exception) {

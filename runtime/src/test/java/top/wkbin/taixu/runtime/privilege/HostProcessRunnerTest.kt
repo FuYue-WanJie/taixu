@@ -46,6 +46,31 @@ class HostProcessRunnerTest {
         }
     }
 
+    @Test
+    fun `cancelled operationId can be reused`() {
+        // 验证 cancel() 后 running map 已清理，同 id 可再次执行
+        val process1 = FakeProcess(completed = false)
+        val runner = HostProcessRunner { command ->
+            if (command == "first") process1
+            else FakeProcess(completed = true, stdout = "reused-ok")
+        }
+        val executor = Executors.newSingleThreadExecutor()
+        try {
+            val future1 = executor.submit<ShellExecResult> { runner.execute("reuse-id", "first") }
+            // 等待第一个操作进入 running map
+            Thread.sleep(100)
+            assertTrue("cancel should succeed", runner.cancel("reuse-id"))
+            future1.get(5, TimeUnit.SECONDS)
+
+            // 同 id 立即复用——修复前会抛 "已在执行" 异常
+            val result2 = runner.execute("reuse-id", "second")
+            assertTrue("reused execution should succeed", result2.success)
+            assertTrue("stdout should contain marker", result2.stdout.contains("reused-ok"))
+        } finally {
+            executor.shutdownNow()
+        }
+    }
+
     private class FakeProcess(
         stdout: String = "",
         stderr: String = "",

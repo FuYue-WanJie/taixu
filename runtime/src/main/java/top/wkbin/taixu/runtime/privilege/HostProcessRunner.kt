@@ -50,6 +50,7 @@ internal class HostProcessRunner(
     fun cancel(operationId: String): Boolean {
         val process = running[operationId] ?: return false
         stopProcess(process)
+        running.remove(operationId, process)
         return true
     }
 
