@@ -18,7 +18,7 @@ class PrivilegeProbeCache(private val ttlMs: Long = 30_000L) {
     @Volatile private var rootAvailable: Boolean = false
 
     /** 30s 内直接返回上次探测结果，否则执行 [probe] 并缓存。 */
-    fun <T> withCache(
+    fun withCache(
         shizukuProbe: () -> Boolean,
         rootProbe: () -> Boolean,
         needRoot: Boolean,
