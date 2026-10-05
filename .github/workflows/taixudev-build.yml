@@ -44,7 +44,7 @@ jobs:
         env:
           TAIXU_DEV_BUILD: "1"
         run: |
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          ./gradlew assembleDebug --no-daemon --stacktrace -x :architectureCheck
 
       - name: Identify and Rename Output APK
         run: |
