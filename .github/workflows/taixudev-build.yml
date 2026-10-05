@@ -74,3 +74,4 @@ jobs:
           files: output/*
           draft: false
           prerelease: true
+# chore: sync workflows
