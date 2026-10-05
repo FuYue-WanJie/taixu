@@ -575,10 +575,6 @@ class PrivilegeManager(
     }
 
     // 通过 Shizuku (shell uid) 执行命令；稳态跳过 guard ping
-     * 因为 ShizukuHostServiceClient.requireService() 内部已包含
-     * pingBinder + checkSelfPermission 的兜底检查，避免单次命令
-     * 路径上 4 次 Binder 往返（2 guard + 2 requireService）。
-     */
     private suspend fun executeViaShizuku(command: String, operationId: String): ShellExecResult {
         val s = state.value
         val steady = s.availability == PrivilegeAvailability.ACTIVE && s.effectiveMode == ExecutionMode.SHIZUKU
