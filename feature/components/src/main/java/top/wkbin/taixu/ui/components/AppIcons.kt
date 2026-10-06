@@ -5,7 +5,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.rememberVectorPainterResource
+import androidx.compose.ui.res.painterResource
 import com.google.android.material.icons.Icons
 import com.google.android.material.icons.outlined.*
 
@@ -101,31 +101,31 @@ object AppIcons {
 
     // ── B 类：品牌 Logo（保留 XML）─────────────────────────────
 
-    @Composable fun LogoAlpine(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_alpine)
-    @Composable fun LogoAndroid(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_android)
-    @Composable fun LogoArch(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_arch)
-    @Composable fun LogoDebian(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_debian)
-    @Composable fun LogoFedora(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_fedora)
-    @Composable fun LogoFlutter(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_flutter)
-    @Composable fun LogoKali(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_kali)
-    @Composable fun LogoLinux(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_linux)
-    @Composable fun LogoUbuntu(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_ubuntu)
-    @Composable fun LogoVoid(): Painter = rememberVectorPainterResource(R.drawable.components_ic_logo_void)
-    @Composable fun LogoGithub(): Painter = rememberVectorPainterResource(R.drawable.components_ic_github)
-    @Composable fun LogoQQ(): Painter = rememberVectorPainterResource(R.drawable.components_ic_qq)
+    @Composable fun LogoAlpine(): Painter = painterResource(R.drawable.components_ic_logo_alpine)
+    @Composable fun LogoAndroid(): Painter = painterResource(R.drawable.components_ic_logo_android)
+    @Composable fun LogoArch(): Painter = painterResource(R.drawable.components_ic_logo_arch)
+    @Composable fun LogoDebian(): Painter = painterResource(R.drawable.components_ic_logo_debian)
+    @Composable fun LogoFedora(): Painter = painterResource(R.drawable.components_ic_logo_fedora)
+    @Composable fun LogoFlutter(): Painter = painterResource(R.drawable.components_ic_logo_flutter)
+    @Composable fun LogoKali(): Painter = painterResource(R.drawable.components_ic_logo_kali)
+    @Composable fun LogoLinux(): Painter = painterResource(R.drawable.components_ic_logo_linux)
+    @Composable fun LogoUbuntu(): Painter = painterResource(R.drawable.components_ic_logo_ubuntu)
+    @Composable fun LogoVoid(): Painter = painterResource(R.drawable.components_ic_logo_void)
+    @Composable fun LogoGithub(): Painter = painterResource(R.drawable.components_ic_github)
+    @Composable fun LogoQQ(): Painter = painterResource(R.drawable.components_ic_qq)
 
     // ── C 类：AI Provider Logo（保留 XML）─────────────────────────
 
-    @Composable fun ProviderAnthropic(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_anthropic)
-    @Composable fun ProviderDeepSeek(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_deepseek)
-    @Composable fun ProviderGemini(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_gemini)
-    @Composable fun ProviderKimi(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_kimi)
-    @Composable fun ProviderLMStudio(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_lmstudio)
-    @Composable fun ProviderMiniMax(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_minimax)
-    @Composable fun ProviderMistral(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_mistral)
-    @Composable fun ProviderNvidia(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_nvidia)
-    @Composable fun ProviderOllama(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_ollama)
-    @Composable fun ProviderOpenAI(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_openai)
-    @Composable fun ProviderOpenRouter(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_openrouter)
-    @Composable fun ProviderQwen(): Painter = rememberVectorPainterResource(R.drawable.components_ic_provider_qwen)
+    @Composable fun ProviderAnthropic(): Painter = painterResource(R.drawable.components_ic_provider_anthropic)
+    @Composable fun ProviderDeepSeek(): Painter = painterResource(R.drawable.components_ic_provider_deepseek)
+    @Composable fun ProviderGemini(): Painter = painterResource(R.drawable.components_ic_provider_gemini)
+    @Composable fun ProviderKimi(): Painter = painterResource(R.drawable.components_ic_provider_kimi)
+    @Composable fun ProviderLMStudio(): Painter = painterResource(R.drawable.components_ic_provider_lmstudio)
+    @Composable fun ProviderMiniMax(): Painter = painterResource(R.drawable.components_ic_provider_minimax)
+    @Composable fun ProviderMistral(): Painter = painterResource(R.drawable.components_ic_provider_mistral)
+    @Composable fun ProviderNvidia(): Painter = painterResource(R.drawable.components_ic_provider_nvidia)
+    @Composable fun ProviderOllama(): Painter = painterResource(R.drawable.components_ic_provider_ollama)
+    @Composable fun ProviderOpenAI(): Painter = painterResource(R.drawable.components_ic_provider_openai)
+    @Composable fun ProviderOpenRouter(): Painter = painterResource(R.drawable.components_ic_provider_openrouter)
+    @Composable fun ProviderQwen(): Painter = painterResource(R.drawable.components_ic_provider_qwen)
 }
