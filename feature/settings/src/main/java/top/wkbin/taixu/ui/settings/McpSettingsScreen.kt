@@ -1209,12 +1209,12 @@ private fun AddMcpServerDialog(
                     Tab(
                         selected = selectedTab == 0,
                         onClick = { selectedTab = 0 },
-                        text = { Text("📝 表单模式", style = MaterialTheme.typography.labelMedium) },
+                        text = { Row(verticalAlignment = Alignment.CenterVertically) { Icon(AppIcons.Edit, null, modifier = Modifier.size(14.dp)); Spacer(Modifier.width(4.dp)); Text("表单模式", style = MaterialTheme.typography.labelMedium) } },
                     )
                     Tab(
                         selected = selectedTab == 1,
                         onClick = { selectedTab = 1 },
-                        text = { Text("📋 JSON 导入", style = MaterialTheme.typography.labelMedium) },
+                        text = { Row(verticalAlignment = Alignment.CenterVertically) { Icon(AppIcons.Document, null, modifier = Modifier.size(14.dp)); Spacer(Modifier.width(4.dp)); Text("JSON 导入", style = MaterialTheme.typography.labelMedium) } },
                     )
                 }
             }

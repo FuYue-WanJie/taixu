@@ -62,7 +62,7 @@ fun NetworkTimelineSheet(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     RuntimeTextButton(onClick = { detailId = null }) {
-                        Text("← 返回", color = MaterialTheme.colorScheme.primary)
+                        Row(verticalAlignment = Alignment.CenterVertically) { Icon(AppIcons.Back, null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.primary); Spacer(Modifier.width(4.dp)); Text("返回", color = MaterialTheme.colorScheme.primary) }
                     }
                     Text(
                         "请求详情",
@@ -304,7 +304,7 @@ private fun methodColor(method: String): Color {
 private fun statusText(req: CapturedRequest): String = when {
     req.statusCode in 200..299 || req.statusCode in 300..399 || req.statusCode >= 400 -> req.statusCode.toString()
     req.source == "native" -> "—"
-    else -> "✕"
+    else -> "✕" // 保留：表格对齐用字符
 }
 
 @Composable

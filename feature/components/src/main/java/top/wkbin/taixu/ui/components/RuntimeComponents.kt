@@ -1560,7 +1560,7 @@ fun RuntimeCheckbox(
             .clickable(enabled = enabled && onCheckedChange != null) { onCheckedChange?.invoke(!checked) },
         contentAlignment = Alignment.Center,
     ) {
-        if (checked) Text("✓", color = checkmark, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        if (checked) Icon(AppIcons.Check, null, tint = checkmark, modifier = Modifier.size(15.dp))
     }
 }
 
@@ -2531,7 +2531,7 @@ fun RuntimeFilterChip(
                     if (leadingIcon != null) {
                         leadingIcon()
                     } else if (selected) {
-                        Text("✓", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = contentColor)
+                        Icon(AppIcons.Check, null, tint = contentColor, modifier = Modifier.size(12.dp))
                     }
                     label()
                     trailingIcon?.invoke()
