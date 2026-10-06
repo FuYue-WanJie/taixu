@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import rikka.shizuku.Shizuku
@@ -88,6 +89,9 @@ class PrivilegeManager(
             applyPrivilegeOptimizations(preferred)
             refreshState(preferred, preferred, PrivilegeAvailability.ACTIVE, check.details)
             logger.i("启动权限校验通过，恢复运行模式: ${preferred.name}")
+            if (preferred == ExecutionMode.SHIZUKU) {
+                kotlinx.coroutines.launch { shizukuHostServiceClient.warmUp() }
+            }
             preferred
         } else {
             val reason = when (check) {
