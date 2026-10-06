@@ -619,7 +619,7 @@ private fun WorkflowNodeCard(
                             modifier = Modifier.weight(1f),
                         ) {
                             Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(vertical = 4.dp)) {
-                                Text("🔗 连线", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, maxLines = 1)
+                                Row(verticalAlignment = Alignment.CenterVertically) { Icon(AppIcons.Link, null, modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.primary); Spacer(Modifier.width(4.dp)); Text("连线", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, maxLines = 1) }
                             }
                         }
                         Surface(
@@ -629,7 +629,7 @@ private fun WorkflowNodeCard(
                             modifier = Modifier.weight(1f),
                         ) {
                             Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(vertical = 4.dp)) {
-                                Text("🗑 删除", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error, maxLines = 1)
+                                Row(verticalAlignment = Alignment.CenterVertically) { Icon(AppIcons.Trash, null, modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.error); Spacer(Modifier.width(4.dp)); Text("删除", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error, maxLines = 1) }
                             }
                         }
                     }

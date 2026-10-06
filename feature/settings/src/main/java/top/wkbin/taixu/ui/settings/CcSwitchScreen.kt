@@ -414,7 +414,7 @@ private fun DaemonServiceCard(
             }
 
             Text(
-                text = "💡 外部浏览器访问提示登录时输入上方账号密码即可",
+                text = "外部浏览器访问提示登录时输入上方账号密码即可",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f),
             )
