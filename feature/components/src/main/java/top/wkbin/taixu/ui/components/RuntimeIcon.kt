@@ -5,6 +5,8 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import top.wkbin.taixu.feature.components.R
 
 enum class RuntimeIconName {
@@ -14,7 +16,7 @@ enum class RuntimeIconName {
     Download, Play, Stop, More, Plus, Chat, List, Copy,
     Folder, File, Code, Edit, Save, ArrowUp, Cpu, Search, Info,
     Image, Attach,
-    // 官方精准品牌与系统/框架 Logo
+    // 官方精准品牌与系统/框架 Logo (B/C 类：保留 XML)
     Linux, Debian, Ubuntu, Arch, Kali, Fedora, Alpine, Void,
     Android, Flutter,
     Github, Qq,
@@ -26,7 +28,9 @@ enum class RuntimeIconName {
 }
 
 /**
- * 统一图标入口：全部走 res/drawable 单轨渲染（Material Symbols Outlined + Lucide + 品牌 Logo），
+ * 统一图标入口：
+ * - A 类通用图标 → material-icons-extended 库 ImageVector（经 AppIcons 映射）
+ * - B/C 类品牌 Logo → 保留 XML drawable（painterResource）
  * 单色图标默认跟随内容色 tint，彩色品牌 Logo 保持原色。
  */
 @Composable
@@ -35,113 +39,129 @@ fun RuntimeIcon(
     modifier: Modifier = Modifier,
     tint: Color = Color.Unspecified,
 ) {
-    val resId = when (name) {
-        RuntimeIconName.Home -> R.drawable.components_ic_home
-        RuntimeIconName.Workspace -> R.drawable.components_ic_workspace
-        RuntimeIconName.Terminal -> R.drawable.components_ic_terminal
-        RuntimeIconName.Settings -> R.drawable.components_ic_settings
-        RuntimeIconName.Back -> R.drawable.components_ic_back
-        RuntimeIconName.ChevronRight -> R.drawable.components_ic_chevronright
-        RuntimeIconName.ChevronDown -> R.drawable.components_ic_chevrondown
-        RuntimeIconName.ChevronUp -> R.drawable.components_ic_chevronup
-        RuntimeIconName.Package -> R.drawable.components_ic_package
-        RuntimeIconName.NavDashboard -> R.drawable.components_ic_nav_dashboard
-        RuntimeIconName.NavMessage -> R.drawable.components_ic_nav_message
-        RuntimeIconName.NavRepository -> R.drawable.components_ic_nav_repository
-        RuntimeIconName.NavSettings -> R.drawable.components_ic_nav_settings
-        RuntimeIconName.Refresh -> R.drawable.components_ic_refresh
-        RuntimeIconName.Shield -> R.drawable.components_ic_shield
-        RuntimeIconName.Storage -> R.drawable.components_ic_storage
-        RuntimeIconName.Globe -> R.drawable.components_ic_globe
-        RuntimeIconName.Trash -> R.drawable.components_ic_trash
-        RuntimeIconName.Close -> R.drawable.components_ic_close
-        RuntimeIconName.Check -> R.drawable.components_ic_check
-        RuntimeIconName.Alert -> R.drawable.components_ic_alert
-        RuntimeIconName.Logs -> R.drawable.components_ic_logs
-        RuntimeIconName.Download -> R.drawable.components_ic_download
-        RuntimeIconName.Play -> R.drawable.components_ic_play
-        RuntimeIconName.Stop -> R.drawable.components_ic_stop
-        RuntimeIconName.More -> R.drawable.components_ic_more
-        RuntimeIconName.Plus -> R.drawable.components_ic_plus
-        RuntimeIconName.Chat -> R.drawable.components_ic_chat
-        RuntimeIconName.List -> R.drawable.components_ic_list
-        RuntimeIconName.Copy -> R.drawable.components_ic_copy
-        RuntimeIconName.Folder -> R.drawable.components_ic_folder
-        RuntimeIconName.File -> R.drawable.components_ic_file
-        RuntimeIconName.Code -> R.drawable.components_ic_code
-        RuntimeIconName.Edit -> R.drawable.components_ic_edit
-        RuntimeIconName.Save -> R.drawable.components_ic_save
-        RuntimeIconName.ArrowUp -> R.drawable.components_ic_arrowup
-        RuntimeIconName.Cpu -> R.drawable.components_ic_cpu
-        RuntimeIconName.Search -> R.drawable.components_ic_search
-        RuntimeIconName.Info -> R.drawable.components_ic_info
-        RuntimeIconName.Image -> R.drawable.components_ic_image
-        RuntimeIconName.Attach -> R.drawable.components_ic_attach
-        RuntimeIconName.Linux -> R.drawable.components_ic_logo_linux
-        RuntimeIconName.Debian -> R.drawable.components_ic_logo_debian
-        RuntimeIconName.Ubuntu -> R.drawable.components_ic_logo_ubuntu
-        RuntimeIconName.Arch -> R.drawable.components_ic_logo_arch
-        RuntimeIconName.Kali -> R.drawable.components_ic_logo_kali
-        RuntimeIconName.Fedora -> R.drawable.components_ic_logo_fedora
-        RuntimeIconName.Alpine -> R.drawable.components_ic_logo_alpine
-        RuntimeIconName.Void -> R.drawable.components_ic_logo_void
-        RuntimeIconName.Android -> R.drawable.components_ic_logo_android
-        RuntimeIconName.Flutter -> R.drawable.components_ic_logo_flutter
-        RuntimeIconName.Github -> R.drawable.components_ic_github
-        RuntimeIconName.Qq -> R.drawable.components_ic_qq
-        RuntimeIconName.Bot -> R.drawable.components_ic_bot
-        RuntimeIconName.Palette -> R.drawable.components_ic_palette
-        RuntimeIconName.FontSize -> R.drawable.components_ic_fontsize
-        RuntimeIconName.Battery -> R.drawable.components_ic_battery
-        RuntimeIconName.Bug -> R.drawable.components_ic_bug
-        RuntimeIconName.Update -> R.drawable.components_ic_update
-        RuntimeIconName.Extension -> R.drawable.components_ic_extension
-        RuntimeIconName.Hub -> R.drawable.components_ic_hub
-        RuntimeIconName.Mount -> R.drawable.components_ic_mount
-        RuntimeIconName.OpenInNew -> R.drawable.components_ic_openinnew
-        RuntimeIconName.Key -> R.drawable.components_ic_key
-        RuntimeIconName.Tune -> R.drawable.components_ic_tune
-        RuntimeIconName.Brain -> R.drawable.components_ic_brain
-        RuntimeIconName.Sparkles -> R.drawable.components_ic_sparkles
-        RuntimeIconName.Vibrate -> R.drawable.components_ic_vibrate
-        RuntimeIconName.FolderDownload -> R.drawable.components_ic_folderdownload
-        RuntimeIconName.Document -> R.drawable.components_ic_document
-        RuntimeIconName.SdCard -> R.drawable.components_ic_sdcard
-        RuntimeIconName.Server -> R.drawable.components_ic_server
-        RuntimeIconName.Compress -> R.drawable.components_ic_compress
-        RuntimeIconName.Prompt -> R.drawable.components_ic_prompt
-        RuntimeIconName.Wrench -> R.drawable.components_ic_wrench
-        RuntimeIconName.Model -> R.drawable.components_ic_model
-        RuntimeIconName.Network -> R.drawable.components_ic_network
-        RuntimeIconName.Community -> R.drawable.components_ic_community
-        RuntimeIconName.FolderOpen -> R.drawable.components_ic_folderopen
-        RuntimeIconName.Speed -> R.drawable.components_ic_speed
-        RuntimeIconName.Cable -> R.drawable.components_ic_cable
-        RuntimeIconName.Admin -> R.drawable.components_ic_admin
-        RuntimeIconName.Link -> R.drawable.components_ic_link
-        RuntimeIconName.Reverse -> R.drawable.components_ic_reverse
-        RuntimeIconName.PowerSettingsNew -> R.drawable.components_ic_powersettingsnew
-        RuntimeIconName.Visibility -> R.drawable.components_ic_visibility
-        RuntimeIconName.VisibilityOff -> R.drawable.components_ic_visibilityoff
-        RuntimeIconName.Sponsor -> R.drawable.components_ic_sponsor
-        RuntimeIconName.Mail -> R.drawable.components_ic_mail
-        RuntimeIconName.GitBranch -> R.drawable.components_ic_gitbranch
-        RuntimeIconName.GitCommit -> R.drawable.components_ic_gitcommit
+    // A 类：从 material-icons-extended 库获取 ImageVector
+    val imageVector: ImageVector? = when (name) {
+        RuntimeIconName.Home -> AppIcons.Home
+        RuntimeIconName.Workspace -> AppIcons.Workspace
+        RuntimeIconName.Terminal -> AppIcons.Terminal
+        RuntimeIconName.Settings -> AppIcons.Settings
+        RuntimeIconName.Back -> AppIcons.Back
+        RuntimeIconName.ChevronRight -> AppIcons.ChevronRight
+        RuntimeIconName.ChevronDown -> AppIcons.ChevronDown
+        RuntimeIconName.ChevronUp -> AppIcons.ChevronUp
+        RuntimeIconName.Package -> AppIcons.Package
+        RuntimeIconName.NavDashboard -> AppIcons.NavDashboard
+        RuntimeIconName.NavMessage -> AppIcons.NavMessage
+        RuntimeIconName.NavRepository -> AppIcons.NavRepository
+        RuntimeIconName.NavSettings -> AppIcons.NavSettings
+        RuntimeIconName.Refresh -> AppIcons.Refresh
+        RuntimeIconName.Shield -> AppIcons.Shield
+        RuntimeIconName.Storage -> AppIcons.Storage
+        RuntimeIconName.Globe -> AppIcons.Globe
+        RuntimeIconName.Trash -> AppIcons.Trash
+        RuntimeIconName.Close -> AppIcons.Close
+        RuntimeIconName.Check -> AppIcons.Check
+        RuntimeIconName.Alert -> AppIcons.Alert
+        RuntimeIconName.Logs -> AppIcons.Logs
+        RuntimeIconName.Download -> AppIcons.Download
+        RuntimeIconName.Play -> AppIcons.Play
+        RuntimeIconName.Stop -> AppIcons.Stop
+        RuntimeIconName.More -> AppIcons.More
+        RuntimeIconName.Plus -> AppIcons.Plus
+        RuntimeIconName.Chat -> AppIcons.Chat
+        RuntimeIconName.List -> AppIcons.List
+        RuntimeIconName.Copy -> AppIcons.Copy
+        RuntimeIconName.Folder -> AppIcons.Folder
+        RuntimeIconName.File -> AppIcons.File
+        RuntimeIconName.Code -> AppIcons.Code
+        RuntimeIconName.Edit -> AppIcons.Edit
+        RuntimeIconName.Save -> AppIcons.Save
+        RuntimeIconName.ArrowUp -> AppIcons.ArrowUp
+        RuntimeIconName.Cpu -> AppIcons.Cpu
+        RuntimeIconName.Search -> AppIcons.Search
+        RuntimeIconName.Info -> AppIcons.Info
+        RuntimeIconName.Image -> AppIcons.ImageIcon
+        RuntimeIconName.Attach -> AppIcons.Attach
+        RuntimeIconName.Bot -> AppIcons.Bot
+        RuntimeIconName.Palette -> AppIcons.Palette
+        RuntimeIconName.FontSize -> AppIcons.FontSize
+        RuntimeIconName.Battery -> AppIcons.Battery
+        RuntimeIconName.Bug -> AppIcons.Bug
+        RuntimeIconName.Update -> AppIcons.Update
+        RuntimeIconName.Extension -> AppIcons.Extension
+        RuntimeIconName.Hub -> AppIcons.Hub
+        RuntimeIconName.Mount -> AppIcons.Mount
+        RuntimeIconName.OpenInNew -> AppIcons.OpenInNew
+        RuntimeIconName.Key -> AppIcons.Key
+        RuntimeIconName.Tune -> AppIcons.Tune
+        RuntimeIconName.Brain -> AppIcons.Brain
+        RuntimeIconName.Sparkles -> AppIcons.Sparkles
+        RuntimeIconName.Vibrate -> AppIcons.Vibrate
+        RuntimeIconName.FolderDownload -> AppIcons.FolderDownload
+        RuntimeIconName.Document -> AppIcons.Document
+        RuntimeIconName.SdCard -> AppIcons.SdCard
+        RuntimeIconName.Server -> AppIcons.Server
+        RuntimeIconName.Compress -> AppIcons.Compress
+        RuntimeIconName.Prompt -> AppIcons.Prompt
+        RuntimeIconName.Wrench -> AppIcons.Wrench
+        RuntimeIconName.Model -> AppIcons.Model
+        RuntimeIconName.Network -> AppIcons.Network
+        RuntimeIconName.Community -> AppIcons.Community
+        RuntimeIconName.FolderOpen -> AppIcons.FolderOpen
+        RuntimeIconName.Speed -> AppIcons.Speed
+        RuntimeIconName.Cable -> AppIcons.Cable
+        RuntimeIconName.Admin -> AppIcons.Admin
+        RuntimeIconName.Link -> AppIcons.Link
+        RuntimeIconName.Reverse -> AppIcons.Reverse
+        RuntimeIconName.PowerSettingsNew -> AppIcons.PowerSettings
+        RuntimeIconName.Visibility -> AppIcons.Visibility
+        RuntimeIconName.VisibilityOff -> AppIcons.VisibilityOff
+        RuntimeIconName.Sponsor -> AppIcons.Sponsor
+        RuntimeIconName.Mail -> AppIcons.Mail
+        RuntimeIconName.GitBranch -> AppIcons.GitBranch
+        RuntimeIconName.GitCommit -> AppIcons.GitCommit
+        // B/C 类：保留 XML drawable，返回 null 走下方 painterResource 路径
+        else -> null
     }
 
-    // 彩色品牌 Logo 保持原色；单色图标跟随内容色，可被显式 tint 覆盖
     val isColorfulBrand = name in COLORFUL_BRAND_ICONS
     val effectiveTint = when {
         isColorfulBrand && tint == Color.Unspecified -> Color.Unspecified
         tint != Color.Unspecified -> tint
         else -> LocalContentColor.current
     }
-    Icon(
-        painter = androidx.compose.ui.res.painterResource(resId),
-        contentDescription = null,
-        modifier = modifier,
-        tint = effectiveTint,
-    )
+
+    if (imageVector != null) {
+        Icon(
+            imageVector = imageVector,
+            contentDescription = null,
+            modifier = modifier,
+            tint = effectiveTint,
+        )
+    } else {
+        // B/C 类：品牌 Logo 走 painterResource
+        val resId = when (name) {
+            RuntimeIconName.Linux -> R.drawable.components_ic_logo_linux
+            RuntimeIconName.Debian -> R.drawable.components_ic_logo_debian
+            RuntimeIconName.Ubuntu -> R.drawable.components_ic_logo_ubuntu
+            RuntimeIconName.Arch -> R.drawable.components_ic_logo_arch
+            RuntimeIconName.Kali -> R.drawable.components_ic_logo_kali
+            RuntimeIconName.Fedora -> R.drawable.components_ic_logo_fedora
+            RuntimeIconName.Alpine -> R.drawable.components_ic_logo_alpine
+            RuntimeIconName.Void -> R.drawable.components_ic_logo_void
+            RuntimeIconName.Android -> R.drawable.components_ic_logo_android
+            RuntimeIconName.Flutter -> R.drawable.components_ic_logo_flutter
+            RuntimeIconName.Github -> R.drawable.components_ic_github
+            RuntimeIconName.Qq -> R.drawable.components_ic_qq
+            else -> R.drawable.components_ic_home
+        }
+        Icon(
+            painter = androidx.compose.ui.res.painterResource(resId),
+            contentDescription = null,
+            modifier = modifier,
+            tint = effectiveTint,
+        )
+    }
 }
 
 /** 多色品牌 Logo 集合：不参与 tint，展示资源原始配色 */
