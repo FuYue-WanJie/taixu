@@ -1090,7 +1090,7 @@ private fun NodeInspectorCard(
             ) {
                 Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
-                        text = "💡 节点作用：${meta.summary}",
+                        text = "节点作用：${meta.summary}",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.primary,
@@ -1578,7 +1578,7 @@ private fun BranchRouterCard(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = "💡 节点会求值上方表达式：成立 exitCode=0，不成立 exitCode=1（节点本身仍成功，便于分流）。\n" +
+                    text = "节点会求值上方表达式：成立 exitCode=0，不成立 exitCode=1（节点本身仍成功，便于分流）。\n" +
                         "下面可快速把成功/失败分支连到目标节点。",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

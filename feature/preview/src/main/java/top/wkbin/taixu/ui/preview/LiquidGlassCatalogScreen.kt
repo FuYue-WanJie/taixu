@@ -265,7 +265,7 @@ fun LiquidGlassCatalogScreen(
                             verticalArrangement = Arrangement.spacedBy(16.dp),
                         ) {
                             Text(
-                                text = "✨ Glass-on-Glass 安全嵌套演示：本抽屉使用 Thick 材质，抽屉内部的卡片与按钮已自动通过 CompositionLocalProvider 折射本抽屉，彻底杜绝 RenderThread 递归合成崩溃。",
+                                text = "Glass-on-Glass 安全嵌套演示：本抽屉使用 Thick 材质，抽屉内部的卡片与按钮已自动通过 CompositionLocalProvider 折射本抽屉，彻底杜绝 RenderThread 递归合成崩溃。",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )

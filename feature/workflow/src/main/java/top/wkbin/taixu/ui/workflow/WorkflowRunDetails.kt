@@ -336,7 +336,7 @@ private fun ApkSelectorSection(
                                     color = MaterialTheme.colorScheme.primary,
                                 ) {
                                     Text(
-                                        text = "✨ 最新生成",
+                                        text = "最新生成",
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onPrimary,
                                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),

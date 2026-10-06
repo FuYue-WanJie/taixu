@@ -359,7 +359,7 @@ fun PermissionGuideScreen(
                             if (step.tip != null) {
                                 Spacer(Modifier.height(2.dp))
                                 Text(
-                                    text = "💡 ${step.tip}",
+                                    text = "${step.tip}",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.primary,
                                 )

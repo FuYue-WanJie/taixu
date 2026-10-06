@@ -284,7 +284,7 @@ fun WebChatBridgeDialog(
                             }
 
                             Text(
-                                text = "💡 提示：确保电脑与手机处于同一 Wi-Fi；当前在线设备：${status.activeConnections} 台",
+                                text = "提示：确保电脑与手机处于同一 Wi-Fi；当前在线设备：${status.activeConnections} 台",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )

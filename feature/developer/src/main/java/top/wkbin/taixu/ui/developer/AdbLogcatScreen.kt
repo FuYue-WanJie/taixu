@@ -190,7 +190,7 @@ fun AdbLogcatScreen(
             SectionHeader("安全配对与连接", "密钥持久化保存在应用私有目录；完成一次配对后无需再查端口")
             RuntimeCard(Modifier.fillMaxWidth()) {
                 NoticeBanner(
-                    text = "💡 通知栏快捷配对推荐：Android 系统在开启「使用配对码配对设备」弹窗时，切出设置会关闭弹窗并使配对码失效。开启上方「通知栏配对助手」后，可在系统开发者选项弹窗中直接下拉通知栏输入 6 位配对码并提交，无需切屏！",
+                    text = "通知栏快捷配对推荐：Android 系统在开启「使用配对码配对设备」弹窗时，切出设置会关闭弹窗并使配对码失效。开启上方「通知栏配对助手」后，可在系统开发者选项弹窗中直接下拉通知栏输入 6 位配对码并提交，无需切屏！",
                     isError = false,
                 )
                 Spacer(Modifier.height(10.dp))
