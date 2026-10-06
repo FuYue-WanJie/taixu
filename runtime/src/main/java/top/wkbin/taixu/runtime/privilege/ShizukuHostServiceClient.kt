@@ -27,6 +27,7 @@ class ShizukuHostServiceClient(
         .daemon(false)
         .debuggable(false)
 
+    private val logger = android.util.Log
     private val connectionMutex = Mutex()
     @Volatile private var service: IShizukuHostService? = null
     @Volatile private var pendingConnection: CompletableDeferred<IShizukuHostService>? = null
@@ -35,6 +36,8 @@ class ShizukuHostServiceClient(
         override fun onServiceConnected(name: ComponentName, binder: IBinder) {
             val connected = IShizukuHostService.Stub.asInterface(binder)
             service = connected
+            Log.d("ShizukuHostSvc", "connected")
+            logger.i("Shizuku UserService connected")
             pendingConnection?.complete(connected)
         }
 
@@ -52,6 +55,21 @@ class ShizukuHostServiceClient(
             service = null
             pendingConnection?.completeExceptionally(IllegalStateException("Shizuku UserService 未返回 Binder"))
         }
+    }
+
+    /**
+     * 预热绑定：在权限确认可用后、首次 host 工具调用前调用。
+     * 提前完成冷绑定，避免用户侧感受到 10-30s 的首次等待。
+     */
+    suspend fun warmUp() {
+        runCatching { requireService() }
+            .onFailure { logger.d("Shizuku warmUp deferred: ${it.message}") }
+    }
+
+    /** 预热绑定：权限确认 ACTIVE 后提前完成冷绑定，避免首次 host 调用等 10-30s。 */
+    suspend fun warmUp() {
+        runCatching { requireService() }
+            .onFailure { Log.d("ShizukuHostSvc", "warmUp deferred: ${it.message}") }
     }
 
     suspend fun execute(operationId: String, command: String): ShellExecResult = withContext(Dispatchers.IO) {
@@ -104,8 +122,13 @@ class ShizukuHostServiceClient(
     }
 
     companion object {
-        private const val CONNECTION_TIMEOUT_MS = 20_000L
+        /**
+         * 冷绑定超时。ShizukuUserService 由 Shizuku fork 独立进程，首次需
+         * 加载 APK classloader + AIDL Stub；中低端设备实测 10-20s。
+         * 给 30s 覆盖最坏情况，已绑定状态下此值不影响性能。
+         */
+        private const val CONNECTION_TIMEOUT_MS = 30_000L
         private const val BIND_MAX_RETRIES = 2
-        private const val BIND_RETRY_DELAY_MS = 1_000L
+        private const val BIND_RETRY_DELAY_MS = 500L
     }
 }
